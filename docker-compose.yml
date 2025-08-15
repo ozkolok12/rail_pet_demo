@@ -1,0 +1,84 @@
+x-airflow-common: &airflow-common
+  build: .
+  env_file: .env
+  environment:
+    - AIRFLOW__CORE__EXECUTOR=${AIRFLOW__CORE__EXECUTOR}
+    - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+    - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
+    - _PIP_ADDITIONAL_REQUIREMENTS=-r /opt/airflow/requirements.txt
+    - PYTHONPATH=/opt/airflow:/opt/airflow/scripts
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./airflow/requirements.txt:/opt/airflow/requirements.txt
+    - ./airflow/scripts:/opt/airflow/scripts
+    - ./airflow/sql:/opt/airflow/sql
+    - ./data:/data
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: demo_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      retries: 30
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+
+  airflow-init:
+    <<: *airflow-common
+    container_name: airflow_init
+    entrypoint: /bin/bash
+    command: >
+      -lc "
+      pip install -r /opt/airflow/requirements.txt &&
+      airflow db migrate &&
+      airflow users create
+        --username admin
+        --password admin
+        --firstname Demo
+        --lastname User
+        --role Admin
+        --email demo@example.com
+      "
+    restart: "no"
+
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: airflow_web
+    command: webserver
+    ports:
+      - "8082:8080"
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: airflow_scheduler
+    command: scheduler
+
+  metabase:
+    image: metabase/metabase:v0.49.15
+    container_name: metabase
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_FILE: /metabase.db
+    volumes:
+      - metabase:/metabase.db
+
+volumes:
+  pgdata:
+  metabase:
