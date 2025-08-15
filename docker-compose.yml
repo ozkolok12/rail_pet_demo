@@ -38,6 +38,7 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d:ro
 
+
   airflow-init:
     <<: *airflow-common
     container_name: airflow_init
