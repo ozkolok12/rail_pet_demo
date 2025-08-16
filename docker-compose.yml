@@ -65,7 +65,7 @@ services:
     container_name: rail_pet_demo_metabase
     restart: always
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       MB_DB_FILE: /metabase.db
     volumes:
