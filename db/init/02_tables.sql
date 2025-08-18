@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS dwh.d_sender (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     departure_station_sng_code BIGINT,
-    departure_railway VARCHAR(3),
+    departure_railway VARCHAR(10),
     departure_country VARCHAR(60),
     departure_station_sng VARCHAR(60),
     departure_region VARCHAR(60),
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS dwh.d_consignee (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     destination_country VARCHAR(60),
     destination_region VARCHAR(60),
-    destination_railway VARCHAR(3),
+    destination_railway VARCHAR(10),
     destination_station_rus VARCHAR(60),
     destination_station_rus_code BIGINT,
     destination_station_sng VARCHAR(60),
@@ -201,14 +201,14 @@ CREATE TABLE IF NOT EXISTS staging.temp_table (
     departure_station_sng VARCHAR(60),                -- Станция отправления СНГ
     departure_station_sng_code BIGINT,                -- Код станции отправления СНГ
     departure_region TEXT,                     -- Область отправления
-    departure_railway VARCHAR(3),                     -- Дорога отправления
+    departure_railway VARCHAR(10),                     -- Дорога отправления
     departure_station_rus VARCHAR(60),                -- Станция отправления РФ
     departure_station_rus_code BIGINT,                -- Код станции отправления РФ
     sender TEXT,                                      -- Грузоотправитель
     sender_okpo VARCHAR(60),                          -- Грузоотправитель (ОКПО)
     destination_country VARCHAR(60),                  -- Государство назначения
     destination_region TEXT,                   -- Область назначения
-    destination_railway VARCHAR(3),                   -- Дорога назначения
+    destination_railway VARCHAR(10),                   -- Дорога назначения
     destination_station_rus VARCHAR(60),              -- Станция назначения РФ
     destination_station_rus_code BIGINT,              -- Код станции назначения РФ
     destination_station_sng VARCHAR(60),              -- Станция назначения СНГ
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS datamart.universal_datamart (
 
     -- sender block
     departure_station_sng_code BIGINT,
-    departure_railway VARCHAR(3),
+    departure_railway VARCHAR(10),
     departure_country VARCHAR(60),
     departure_station_sng VARCHAR(60),
     departure_region VARCHAR(60),
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS datamart.universal_datamart (
     -- consignee block
     destination_country VARCHAR(60),
     destination_region VARCHAR(60),
-    destination_railway VARCHAR(3),
+    destination_railway VARCHAR(10),
     destination_station_rus VARCHAR(60),
     destination_station_rus_code BIGINT,
     destination_station_sng VARCHAR(60),
@@ -341,7 +341,7 @@ CREATE TABLE IF NOT EXISTS staging.temp_table_wagon (
 CREATE TABLE IF NOT EXISTS staging.temp_table_sender (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     departure_station_sng_code BIGINT,
-    departure_railway VARCHAR(3),
+    departure_railway VARCHAR(10),
     departure_country VARCHAR(60),
     departure_station_sng VARCHAR(60),
     departure_region VARCHAR(60),
@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS staging.temp_table_consignee (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     destination_country VARCHAR(60),
     destination_region VARCHAR(60),
-    destination_railway VARCHAR(3),
+    destination_railway VARCHAR(10),
     destination_station_rus VARCHAR(60),
     destination_station_rus_code BIGINT,
     destination_station_sng VARCHAR(60),
@@ -390,14 +390,14 @@ CREATE TABLE IF NOT EXISTS staging.temp_table_dublicates (
       departure_station_sng VARCHAR(60),                -- Станция отправления СНГ
       departure_station_sng_code BIGINT,                -- Код станции отправления СНГ
       departure_region TEXT,                     -- Область отправления
-      departure_railway VARCHAR(3),                     -- Дорога отправления
+      departure_railway VARCHAR(10),                     -- Дорога отправления
       departure_station_rus VARCHAR(60),                -- Станция отправления РФ
       departure_station_rus_code BIGINT,                -- Код станции отправления РФ
       sender TEXT,                                      -- Грузоотправитель
       sender_okpo VARCHAR(60),                          -- Грузоотправитель (ОКПО)
       destination_country VARCHAR(60),                  -- Государство назначения
       destination_region TEXT,                   -- Область назначения
-      destination_railway VARCHAR(3),                   -- Дорога назначения
+      destination_railway VARCHAR(10),                   -- Дорога назначения
       destination_station_rus VARCHAR(60),              -- Станция назначения РФ
       destination_station_rus_code BIGINT,              -- Код станции назначения РФ
       destination_station_sng VARCHAR(60),              -- Станция назначения СНГ

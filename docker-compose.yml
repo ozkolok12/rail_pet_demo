@@ -36,7 +36,7 @@ services:
       retries: 30
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - ./db/init:/docker-entrypoint-initdb.d
 
   airflow-init:
     <<: *airflow-common
@@ -61,11 +61,11 @@ services:
     command: scheduler
 
   metabase:
-    image: metabase/metabase:v0.49.15
+    image: metabase/metabase
     container_name: rail_pet_demo_metabase
     restart: always
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       MB_DB_FILE: /metabase.db
     volumes:

@@ -22,3 +22,4 @@ __pycache__/
 .vscode/
 
 data/raw_demo/temp_origin/**
+*.dump
