@@ -1,13 +1,10 @@
 # env / creds
-.env
-.env.*
 *client_secret*.json
 *token*.json
 *.key
 *.pem
 
 # local data
-data/raw/**
 data/loaded/**
 airflow/logs/**
 airflow/data/**

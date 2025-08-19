@@ -9,8 +9,8 @@ services:
       MB_ENCRYPTION_SECRET_KEY: ${MB_ENCRYPTION_SECRET_KEY}
     volumes:
       # Смонтируем бэкапы ровно под это базовое имя:
-      - ../backup/metabase_db_backup_2025-08-18_2041/metabase.db.mv.db:/appdb/metabase.db/metabase.db.mv.db
-      - ../backup/metabase_db_backup_2025-08-18_2041/metabase.db.trace.db:/appdb/metabase.db/metabase.db.trace.db
+      - ./backup/metabase_db_backup_2025-08-18_2041/metabase.db.mv.db:/appdb/metabase.db/metabase.db.mv.db
+      - ./backup/metabase_db_backup_2025-08-18_2041/metabase.db.trace.db:/appdb/metabase.db/metabase.db.trace.db
     ports:
       - "3000:3000"
 

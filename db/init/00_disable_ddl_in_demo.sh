@@ -6,4 +6,6 @@ if [ "${DEMO_MODE:-false}" = "true" ]; then
   echo "[init] DEMO_MODE=true — disabling 02_tables.sql to avoid DDL conflicts"
   # Переносим файл из папки init, чтобы entrypoint его не исполнил
   mv /docker-entrypoint-initdb.d/02_tables.sql /docker-entrypoint-initdb.d/.disabled_02_tables.sql || true
+else
+  echo "[init] DEMO_MODE=false — keeping 02_tables.sql"
 fi
