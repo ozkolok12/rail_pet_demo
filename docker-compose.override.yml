@@ -1,0 +1,37 @@
+services:
+  metabase:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Базовое имя БД (без .mv.db). Обрати внимание: это ФАЙЛ, не папка.
+      MB_DB_FILE: /appdb/metabase.db
+      MB_ENCRYPTION_SECRET_KEY: ${MB_ENCRYPTION_SECRET_KEY}
+    volumes:
+      # Смонтируем бэкапы ровно под это базовое имя:
+      - ../backup/metabase_db_backup_2025-08-18_2041/metabase.db.mv.db:/appdb/metabase.db/metabase.db.mv.db
+      - ../backup/metabase_db_backup_2025-08-18_2041/metabase.db.trace.db:/appdb/metabase.db/metabase.db.trace.db
+    ports:
+      - "3000:3000"
+
+  # Airflow запускаем только в LIVE-профиле
+  airflow-init:
+    profiles: ["live"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  airflow-webserver:
+    profiles: ["live"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  airflow-scheduler:
+    profiles: ["live"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  mb_plugins:

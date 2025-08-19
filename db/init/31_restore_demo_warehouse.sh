@@ -1,13 +1,16 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 echo "[init] Checking DEMO_MODE to restore warehouse data…"
+until pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" >/dev/null 2>&1; do
+  sleep 1
+done
 
-until pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" -h 127.0.0.1; do sleep 1; done
-
-if [ "${DEMO_MODE}" = "true" ]; then
-  echo "[init] Restoring demo warehouse from dump"
-  pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" /docker-entrypoint-initdb.d/demo_warehouse.dump
+if [ "${DEMO_MODE:-false}" = "true" ]; then
+  echo "[init] DEMO_MODE=true — restoring demo warehouse (idempotent via --clean)"
+  pg_restore -v --clean --if-exists --no-owner --no-privileges \
+    -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
+    /docker-entrypoint-initdb.d/demo_warehouse.dump
 else
   echo "[init] DEMO_MODE=false — skipping demo warehouse restore."
 fi
